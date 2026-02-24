@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 BULLS & COWS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="ambient-canvas"></canvas>
+
+    <div class="victory-overlay" id="victory-overlay">
+        <div class="victory-content">
+            <div class="victory-emoji">🎉🏆🎊</div>
+            <div class="victory-title">AMAZING!</div>
+            <div class="victory-stats">
+                <div class="victory-stat">
+                    <div class="victory-stat-label">Time</div>
+                    <div class="victory-stat-value" id="victory-time">--</div>
+                </div>
+                <div class="victory-stat">
+                    <div class="victory-stat-label">Attempts</div>
+                    <div class="victory-stat-value" id="victory-attempts">--</div>
+                </div>
+                <div class="victory-stat">
+                    <div class="victory-stat-label">Difficulty</div>
+                    <div class="victory-stat-value" id="victory-difficulty">--</div>
+                </div>
+            </div>
+            <button class="submit-btn" onclick="closeVictory()" style="margin-top: 20px;">🎮 Play Again</button>
+        </div>
+    </div>
+
+    <!-- Main Game -->
+    <div class="game-wrapper">
+        <!-- Stats Panel -->
+        <div class="stats-panel">
+            <!-- Session Stats -->
+            <div class="stat-card">
+                <h3>📊 SESSION STATS</h3>
+                <div class="stat-row">
+                    <span class="stat-label">Games Played</span>
+                    <span class="stat-value" id="games-played">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Wins</span>
+                    <span class="stat-value" id="total-wins">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Win Rate</span>
+                    <span class="stat-value" id="win-rate">0%</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Avg. Attempts</span>
+                    <span class="stat-value" id="avg-attempts">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Best Time</span>
+                    <span class="stat-value" id="best-time">--</span>
+                </div>
+            </div>
+
+            <!-- Leaderboard -->
+            <div class="stat-card">
+                <h3>🏆 LEADERBOARD</h3>
+                <div id="leaderboard">
+                    <div style="text-align: center; color: rgba(255,255,255,0.3); padding: 40px 20px; font-size: 0.9rem;">
+                        🎯 No records yet!<br>Start playing to see your best runs here
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div class="game-container">
+            <header>
+                <div class="emoji-header">🐮 🎯 🐂</div>
+                <h1>BULLS & COWS</h1>
+                <div class="version-badge">✨ COLORFUL EDITION</div>
+            </header>
+
+            <!-- Difficulty Selection -->
+            <div class="difficulty-selector">
+                <button class="diff-btn easy active" onclick="setDifficulty('easy')">😊 EASY</button>
+                <button class="diff-btn medium" onclick="setDifficulty('medium')">🎯 MEDIUM</button>
+                <button class="diff-btn hard" onclick="setDifficulty('hard')">🔥 HARD</button>
+            </div>
+
+            <!-- Game Info -->
+            <div class="game-info">
+                <div class="info-card">
+                    <div class="info-label">⏱️ Timer</div>
+                    <div class="info-value" id="timer">00:00</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">🎯 Attempts</div>
+                    <div class="info-value" id="attempts">0</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">💡 Hints</div>
+                    <div class="info-value" id="hints-left">3</div>
+                </div>
+            </div>
+
+            <!-- Mode Selection -->
+            <div class="mode-switch">
+                <button class="mode-btn active" id="btn-mode-human" onclick="setMode('human')">
+                    🎮 Player vs CPU
+                </button>
+                <button class="mode-btn" id="btn-mode-ai" onclick="setMode('ai')">
+                    🤖 AI vs Player
+                </button>
+            </div>
+
+            <!-- Status Bar -->
+            <div class="status-msg" id="status-msg">🚀 Ready to play! Crack the code!</div>
+
+            <!-- Game Log -->
+            <div class="display-area" id="game-log"></div>
+
+            <!-- Controls: Human Guessing -->
+            <div class="input-area" id="input-area-human">
+                <div class="input-wrapper">
+                    <input type="text" id="human-guess" maxlength="4" placeholder="____" autocomplete="off">
+                    <button class="submit-btn" onclick="submitHumanGuess()">SUBMIT</button>
+                </div>
+                <button class="hint-btn" id="hint-btn" onclick="getHint()">💡 Get Hint</button>
+                <div class="hint-display hidden" id="hint-display"></div>
+                <div class="rules">
+                    Enter 4 unique digits • Press <span class="key">ENTER</span> to submit
+                </div>
+            </div>
+
+            <!-- Controls: AI Guessing -->
+            <div class="input-area hidden" id="input-area-ai">
+                <div class="ai-feedback">
+                    <div class="feedback-title">🤖 Rate AI's Guess</div>
+                    <div class="feedback-row">
+                        <label>🎯 Bulls (Position + Value):</label>
+                        <input type="number" id="ai-bulls" min="0" max="4" value="0">
+                    </div>
+                    <div class="feedback-row">
+                        <label>🐮 Cows (Value Only):</label>
+                        <input type="number" id="ai-cows" min="0" max="4" value="0">
+                    </div>
+                </div>
+                <div class="input-wrapper">
+                    <button class="submit-btn" style="width:100%" onclick="submitAIFeedback()">SUBMIT FEEDBACK</button>
+                </div>
+                <div class="rules">
+                    AI's Guess: <span id="ai-current-guess" style="color:#fff; font-weight: 700; letter-spacing: 5px;">????</span>
+                    <br>Compare with your secret number
+                </div>
+            </div>
+            
+            <!-- Controls -->
+            <div class="control-btns">
+                <button class="ctrl-btn" onclick="initGame()">🔄 Reset Game</button>
+                <button class="ctrl-btn" onclick="toggleSound()">
+                    <span id="sound-icon">🔊</span> Sound <span id="sound-status">ON</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+   <script src="script.js">
+   </script>
+</body>
+</html>
