@@ -108,20 +108,7 @@ Fully responsive and mobile-friendly:
    Result:      1 Bull (1 is correct), 1 Cow (3 is in code but wrong position)
    ```
 
-## 📊 Statistics Explained
 
-### Session Stats
-- **Games Played**: Total number of games started
-- **Wins**: Successfully cracked codes
-- **Win Rate**: Percentage of games won
-- **Avg. Attempts**: Average number of guesses per win
-- **Best Time**: Fastest time to crack a code
-
-### Leaderboard
-- Top 5 best runs ranked by:
-  1. Fewest attempts (primary)
-  2. Fastest time (tiebreaker)
-- Medal rankings: 🥇 Gold, 🥈 Silver, 🥉 Bronze
 
 ## 🎨 Customization
 
@@ -160,23 +147,6 @@ const particleCount = 150; // Increase or decrease
 3. **Track Patterns**: Note which digits appear as cows
 4. **Eliminate Options**: Use process of elimination
 5. **Remember Position**: Bulls tell you what NOT to move
-
----
-
-### Main Game Interface
-- Colorful gradient UI with ambient background
-- Real-time stats tracking
-- Animated feedback system
-
-### Victory Screen
-- Confetti celebration
-- Detailed game statistics
-- Quick restart option
-
-### AI Mode
-- Watch AI solve your code
-- See possibility space shrink
-- Test your feedback accuracy
 
 ---
 
